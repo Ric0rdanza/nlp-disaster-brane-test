@@ -26,8 +26,12 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Setup environment
+        run: |
+          sudo apt-get install python-pip python-yaml
+          pip install pandas
+          pip install tensorflow
+        shell: bash
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
