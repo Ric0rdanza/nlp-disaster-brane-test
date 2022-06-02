@@ -37,7 +37,7 @@ class Test:
         os.environ["SOURCE"] = "train"
         os.environ["LOCATION"] = "./data"
         print(preprocessing.processing(os.environ["LOCATION"], os.environ["SOURCE"]))
-        output = os.system("diff /data/padded_train.pkl ./baseline/padded_train.pkl")
+        output = os.system("diff ./data/padded_train.pkl ./baseline/padded_train.pkl")
         if output == 0:
             return 0
         else:
