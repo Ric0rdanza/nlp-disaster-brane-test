@@ -31,6 +31,8 @@ jobs:
           sudo apt-get install python3-pip python3-yaml
           pip3 install pandas
           pip3 install tensorflow
+          sudo mkdir /data
+          chmod +777 /data
         shell: bash
 
       # Runs a set of commands using the runners shell
