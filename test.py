@@ -11,7 +11,7 @@ class Test:
             "5,,,All residents asked to 'shelter in place' are being notified by officers. No other evacuation or shelter in place orders are expected,1\n",
             "143,accident,,only had a car for not even a week and got in a fucking car accident .. Mfs can't fucking drive .,1\n",
             "180,aftershock,304,Sometimes you face difficulties not because you're doing something wrong but because you're doing something right. - Joel Osteen,0\n"]
-        with open("/data/train.csv", "w") as f:
+        with open("./data/train.csv", "w") as f:
             f.writelines(train_origin)
 
         test_origin = ["id,keyword,location,text\n",
@@ -21,20 +21,22 @@ class Test:
             "166,aftershock,304,Stop saying 'I Wish' and start saying 'I Will'. ?????? Unknown\n",
             "317,annihilated,,How do I step outside for 5 seconds and get annihilated  by mosquitoes?\n"
         ]
-        with open("/data/test.csv", "w") as f:
+        with open("./data/test.csv", "w") as f:
             f.writelines(test_origin)
 
     def test_cleaning(self):
         os.environ["SOURCE"] = "train"
-        print(preprocessing.cleaning(os.environ["SOURCE"]))
-        output = os.system("diff /data/cleaned_train.csv ./baseline/cleaned_train.csv")
+        os.environ["LOCATION"] = "./data"
+        print(preprocessing.cleaning(os.environ["LOCATION"], os.environ["SOURCE"]))
+        output = os.system("diff ./data/cleaned_train.csv ./baseline/cleaned_train.csv")
         if output == 0:
             return 0
         else:
             return 1
     def test_processing(self):
         os.environ["SOURCE"] = "train"
-        print(preprocessing.processing(os.environ["SOURCE"]))
+        os.environ["LOCATION"] = "./data"
+        print(preprocessing.processing(os.environ["LOCATION"], os.environ["SOURCE"]))
         output = os.system("diff /data/padded_train.pkl ./baseline/padded_train.pkl")
         if output == 0:
             return 0
@@ -51,3 +53,4 @@ if __name__ == "__main__":
         exit(1)
     else:
         print(yaml.dump({ "contents": "Processing [OK]"} ))
+    exit(0)

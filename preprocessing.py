@@ -34,9 +34,9 @@ import re
 
 # The functions
 
-def cleaning(source: str) -> str:
+def cleaning(location: str, source: str) -> str:
     try:
-        data = pd.read_csv(f"/data/{source}.csv")
+        data = pd.read_csv(f"{location}/{source}.csv")
         
         def clean_text(text: str):
             text = text.lower()
@@ -48,14 +48,14 @@ def cleaning(source: str) -> str:
             return text
         
         data['text'] = data['text'].apply(lambda x: clean_text(x))
-        data.to_csv(f"/data/cleaned_{source}.csv")
+        data.to_csv(f"{location}/cleaned_{source}.csv")
         return "Cleaned data saved to \"cleaned_{source}.csv\""
     except IOError as e:
         return f"ERROR: {e} ({e.errno})"
 
-def processing(model: str) -> str:
+def processing(location: str, model: str) -> str:
     try:
-        data = pd.read_csv(f"/data/{model}.csv")
+        data = pd.read_csv(f"{location}/{model}.csv")
         sentences = data["text"].fillna("")
         vocab_size = 1000
         embedding_dim = 16
@@ -67,7 +67,7 @@ def processing(model: str) -> str:
         tokenizer.fit_on_texts(sentences)
         sequence = tokenizer.texts_to_sequences(sentences)
         padded = tf.keras.preprocessing.sequence.pad_sequences(sequence, maxlen = 120, truncating = "post")
-        pickle.dump(padded, open(f"/data/padded_{model}.pkl", "wb"))
+        pickle.dump(padded, open(f"{location}/padded_{model}.pkl", "wb"))
         return "Preprocessed data saved to \"/data/padded_{model}.pkl\""
     except IOError as e:
         return "ERROR: {e} ({e.errno})"
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     # If it checks out, call the appropriate function
     command = sys.argv[1]
     if command == "cleaning":
-        print(yaml.dump({ "contents": cleaning(os.environ["SOURCE"]) }))
+        print(yaml.dump({ "contents": cleaning(os.environ["LOCATION"], os.environ["SOURCE"]) }))
     elif command == "processing":
-        print(yaml.dump({ "contents": processing(os.environ["MODEL"]) }))
+        print(yaml.dump({ "contents": processing(os.environ["LOCATION"], os.environ["MODEL"]) }))
     # Done!:
