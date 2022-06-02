@@ -34,3 +34,4 @@ jobs:
         run: |
           ls,
           echo test, and deploy your project.
+        shell: bash
